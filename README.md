@@ -1,5 +1,9 @@
 # week6
 
+## 練習
+1. 使用vue-cli及vue-router
+2. 了解如何部屬gh-pages
+
 ## Project setup
 ```
 npm install
