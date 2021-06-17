@@ -5,22 +5,26 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/Front.vue'),
+    component: () => import('../views/Home.vue'),
     children: [
+      {
+        path: 'cart',
+        name: 'Cart',
+        component: () => import('../views/Cart.vue'),
+      },
       {
         path: 'products',
         component: () => import('../views/Products.vue'),
       },
-      {
-        path: 'product/:id',
-        component: () => import('../views/SingleProduct.vue'),
-      },
-      {
-        path: 'about',
-        name: 'About',
-        component: () => import('../views/About.vue'),
-      },
     ],
+  },
+  {
+    path: '/login',
+    component: () => import('../views/Login.vue'),
+  },
+  {
+    path: '/product/:id',
+    component: () => import('../views/SingleProduct.vue'),
   },
   //  後台
   {
