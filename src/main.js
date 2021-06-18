@@ -1,12 +1,19 @@
 import { createApp } from 'vue';
 
 import { bootstrap } from 'bootstrap/dist/js/bootstrap';
+import { BootstrapIconsPlugin } from 'bootstrap-icons-vue';
 
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 
 import Loading from 'vue3-loading-overlay';
 import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+import BackToTop from 'vue-backtotop';
 
 // Vee-Validation主要套件
 import {
@@ -34,12 +41,17 @@ configure({
 // 強制設定中文
 setLocale('zh_TW');
 
+library.add(fas);
+
 createApp(App)
   .component('Form', Form)
   .component('Field', Field)
   .component('ErrorMessage', ErrorMessage)
   .component('Loading', Loading)
+  .component('font-awesome-icon', FontAwesomeIcon)
   .use(bootstrap)
+  .use(BootstrapIconsPlugin)
   .use(VueAxios, axios)
+  .use(BackToTop)
   .use(router)
   .mount('#app');

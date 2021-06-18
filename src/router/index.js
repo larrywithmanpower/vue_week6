@@ -43,6 +43,10 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
   linkActiveClass: 'active',
+  scrollBehavior() {
+    // 始终滚动到顶部
+    return { bottom: 0 };
+  },
 });
 
 export default router;

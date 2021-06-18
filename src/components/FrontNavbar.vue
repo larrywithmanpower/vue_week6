@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-content-between align-items-center px-4">
+  <div class="d-flex justify-content-between align-items-center px-4" id="top">
     <h1 class="py-4 mb-0">
       <router-link to="/" class="link-secondary text-decoration-none fw-bold"
         >WearFoot</router-link
