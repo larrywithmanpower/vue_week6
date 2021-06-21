@@ -15,7 +15,7 @@
             <div class="col-sm-4">
                 <div class="mb-1">
                   <div class="form-group">
-                      <label for="imageUrl">主要圖片</label>
+                      <label for="imageUrl" class="fw-bold">主要圖片</label>
                       <input
                       v-model="editProduct.imageUrl" type="text"
                       class="form-control"
@@ -23,8 +23,9 @@
                   </div>
                   <img class="img-fluid" :src="editProduct.imageUrl">
                 </div>
+                <hr>
                 <!-- ? 多圖 -->
-                <div class="mb-1">其他圖片</div>
+                <div class="mb-1 fw-bold">其他圖片</div>
                 <div v-if="Array.isArray(editProduct.imagesUrl)">
                     <div class="mb-1" v-for="(image, index) in editProduct.imagesUrl" :key="index">
                         <label for="imageUrl">圖片網址</label>
@@ -163,6 +164,13 @@ export default {
     },
     closeModal() {
       this.productModal.hide();
+    },
+    removeImages() {
+      if (this.editProduct.imagesUrl.length) {
+        this.editProduct.imagesUrl.pop();
+      } else {
+        this.editProduct.imageUrl = '';
+      }
     },
   },
 };
