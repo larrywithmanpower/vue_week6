@@ -1,10 +1,7 @@
 <template>
-  <front-navbar></front-navbar>
   <div class="bg-image">
-    <h2 class="text-center">首頁</h2>
   </div>
   <div class="container py-2">
-    <router-view></router-view>
   </div>
 </template>
 
@@ -17,17 +14,12 @@
 </style>
 
 <script>
-import FrontNavbar from '@/components/FrontNavbar.vue';
-
 export default {
   data() {
     return {
       products: [],
       carts: [],
     };
-  },
-  components: {
-    FrontNavbar,
   },
 };
 </script>

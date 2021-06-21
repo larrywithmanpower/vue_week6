@@ -4,9 +4,14 @@ const routes = [
   // 前台
   {
     path: '/',
-    name: 'Home',
-    component: () => import('../views/Home.vue'),
+    name: 'Layout',
+    component: () => import('../views/Layout.vue'),
     children: [
+      {
+        // ! 設定為空，就可以取代layout變為首頁
+        path: '',
+        component: () => import('../views/Home.vue'),
+      },
       {
         path: 'cart',
         name: 'Cart',
@@ -16,11 +21,11 @@ const routes = [
         path: 'products',
         component: () => import('../views/Products.vue'),
       },
+      {
+        path: '/login',
+        component: () => import('../views/Login.vue'),
+      },
     ],
-  },
-  {
-    path: '/login',
-    component: () => import('../views/Login.vue'),
   },
   {
     path: '/product/:id',

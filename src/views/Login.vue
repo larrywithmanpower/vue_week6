@@ -1,5 +1,4 @@
 <template>
-  <front-navbar></front-navbar>
   <div class="container">
     <div class="d-flex justify-content-center py-5">
       <div class="col-5">
@@ -37,7 +36,6 @@
 </template>
 
 <script>
-import FrontNavbar from '@/components/FrontNavbar.vue';
 
 export default {
   data() {
@@ -47,9 +45,6 @@ export default {
         password: '',
       },
     };
-  },
-  components: {
-    FrontNavbar,
   },
   methods: {
     login() {

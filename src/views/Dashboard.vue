@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">第六周作業</a>
+      <a class="navbar-brand logoFont display-2" href="#">HanShe</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
       data-bs-target="#navbarNav" aria-controls="navbarNav"
       aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,14 @@
     <router-view v-if="checkSuccess"></router-view>
   </div>
 </template>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+
+.logoFont {
+  font-family: 'Permanent Marker', cursive;
+}
+</style>
 
 <script>
 export default {
