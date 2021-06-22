@@ -23,6 +23,13 @@
                   </div>
                   <img class="img-fluid" :src="editProduct.imageUrl">
                 </div>
+                <div class="form-group mb-3">
+                    <label for="photoFile" class="fw-bold">上傳圖片檔案</label>
+                    <input type="file"
+                    id="photoFile"
+                    class="form-control" placeholder="請輸入圖片路徑"
+                    @change="uploadImage">
+                </div>
                 <hr>
                 <!-- ? 多圖 -->
                 <div class="mb-1 fw-bold">其他圖片</div>
@@ -146,7 +153,7 @@ export default {
   props: ['tempProduct', 'isNew'],
   data() {
     return {
-      productModal: '',
+      productModal: {},
       editProduct: {},
     };
   },
@@ -164,6 +171,32 @@ export default {
     },
     closeModal() {
       this.productModal.hide();
+    },
+    uploadImage() {
+      // ! DOM要放在子元件內才找的到
+      const fileInput = document.querySelector('#photoFile');
+      // 取出fileInput中的相片檔案
+      const file = fileInput.files[0];
+      // 格式轉換：使用formData格式來上傳
+      const formData = new FormData();
+      // 新增欄位file-to-upload
+      formData.append('file-to-upload', file);
+
+      const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/upload`;
+      this.$http.post(url, formData).then((res) => {
+        if (res.data.success) {
+          // ! 判斷tempProduct.imageUrl是否存在，不存在就加入倒imageUrl(單張)，存在新增到陣列imagesUrl中
+          if (!this.tempProduct.imageUrl) {
+            this.editProduct.imageUrl = res.data.imageUrl;
+          } else {
+            this.editProduct.imagesUrl.push(res.data.imageUrl);
+          }
+          // 加入傳上圖片就清空value文字
+          fileInput.value = '';
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
     },
     removeImages() {
       if (this.editProduct.imagesUrl.length) {

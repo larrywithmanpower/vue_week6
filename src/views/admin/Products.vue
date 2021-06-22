@@ -16,6 +16,7 @@
             <th width="20%">圖片</th>
             <th width="30%">品名</th>
             <th width="15%">價格</th>
+            <th width="15%">啟用</th>
             <th></th>
           </tr>
         </thead>
@@ -26,19 +27,31 @@
             </td>
             <td>{{ item.title }}</td>
             <td>{{ item.price }}</td>
+            <td
+            :class="[{ 'text-success': item.is_enabled } , { 'text-danger': !item.is_enabled }]"
+            >{{ item.is_enabled ? '啟用' : '未啟用' }}</td>
             <td>
               <div class="btn-group">
                 <button class="btn btn-sm btn-secondary"
                 @click="openModal('edit', item)"
                 >編輯商品</button>
-                <button class="btn btn-sm btn-outline-danger">刪除商品</button>
+                <button
+                class="btn btn-sm btn-outline-danger"
+                @click="openModal('delete', item)"
+                >刪除商品</button>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <!-- pagination -->
+    <pagination
+    :page="pagination"
+    @get-page="getProducts"
+    ></pagination>
   </div>
+  <!-- product modal -->
   <product-modal
   ref="productModal"
   id="productModal"
@@ -46,10 +59,18 @@
   :is-new="isNew"
   @update-product="updateProduct"
   ></product-modal>
+  <!-- del product modal -->
+  <del-product-modal
+  id="delProductModal"
+  ref="delProductModal"
+  :temp-product="tempProduct"
+  @delete-product="deleteProduct"></del-product-modal>
 </template>
 
 <script>
 import productModal from '@/components/ProductModal.vue';
+import delProductModal from '@/components/DelProductModal.vue';
+import pagination from '@/components/Pagination.vue';
 
 export default {
   props: ['token'],
@@ -59,20 +80,25 @@ export default {
       tempProduct: {
         imagesUrl: [],
       },
+      pagination: {},
       isLoading: false,
       isNew: false,
     };
   },
   components: {
     productModal,
+    delProductModal,
+    pagination,
   },
   methods: {
     getProducts(page = 1) {
       this.isLoading = true;
-      const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/products?page:${page}`;
+      const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`;
       this.$http.get(url).then((res) => {
         if (res.data.success) {
           this.products = res.data.products;
+          this.pagination = res.data.pagination;
+          // console.log(this.products);
           this.isLoading = false;
         } else {
           // eslint-disable-next-line no-alert
@@ -97,15 +123,63 @@ export default {
           this.isNew = false;
           this.$refs.productModal.showModal();
           break;
+        case 'delete':
+          this.tempProduct = { ...item };
+          this.$refs.delProductModal.showModal();
+          break;
         default:
       }
     },
     updateProduct(tempProduct) {
+      // ! 新增
       if (this.isNew === true) {
         console.log('新增', tempProduct);
+        const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/product`;
+        this.$http.post(url, { data: tempProduct }).then((res) => {
+          if (res.data.success) {
+            // eslint-disable-next-line no-alert
+            alert(res.data.message);
+            this.getProducts();
+            console.log(res);
+            this.$refs.productModal.closeModal();
+          } else {
+            // eslint-disable-next-line no-alert
+            alert(res.data.message);
+          }
+        }).catch((err) => {
+          console.log(err);
+        });
       } else {
-        console.log('編輯', tempProduct);
+        // ! 編輯
+        const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/product/${tempProduct.id}`;
+        this.$http.put(url, { data: tempProduct }).then((res) => {
+          if (res.data.success) {
+            // eslint-disable-next-line no-alert
+            alert(res.data.message);
+            this.getProducts();
+            this.$refs.productModal.closeModal();
+          } else {
+            // eslint-disable-next-line no-alert
+            alert(res.data.message);
+          }
+        }).catch((err) => {
+          console.log(err);
+        });
       }
+    },
+    deleteProduct(tempProduct) {
+      const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/product/${tempProduct.id}`;
+      this.$http.delete(url).then((res) => {
+        if (res.data.success) {
+          // eslint-disable-next-line no-alert
+          alert(res.data.message);
+          this.getProducts();
+          this.$refs.delProductModal.closeModal();
+        } else {
+          // eslint-disable-next-line no-alert
+          alert(res.data.message);
+        }
+      });
     },
   },
   created() {

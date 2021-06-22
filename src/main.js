@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 
-import { bootstrap } from 'bootstrap/dist/js/bootstrap';
+import 'bootstrap';
 import { BootstrapIconsPlugin } from 'bootstrap-icons-vue';
 
 import axios from 'axios';
@@ -49,7 +49,6 @@ createApp(App)
   .component('ErrorMessage', ErrorMessage)
   .component('Loading', Loading)
   .component('font-awesome-icon', FontAwesomeIcon)
-  .use(bootstrap)
   .use(BootstrapIconsPlugin)
   .use(VueAxios, axios)
   .use(BackToTop)
