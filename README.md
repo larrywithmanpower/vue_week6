@@ -3,6 +3,11 @@
 ## 練習
 1. 使用vue-cli及vue-router
 2. 了解如何部屬gh-pages
+# week7
+
+## 練習
+1. 加入pagination
+2. 製作order page
 
 ## Project setup
 ```
