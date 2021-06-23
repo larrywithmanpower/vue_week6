@@ -13,7 +13,7 @@
       <table class="table align-middle text-center">
         <thead>
           <tr>
-            <th width="20%">圖片</th>
+            <th width="15%">圖片</th>
             <th width="30%">品名</th>
             <th width="15%">價格</th>
             <th width="15%">啟用</th>
@@ -46,10 +46,12 @@
       </table>
     </div>
     <!-- pagination -->
-    <pagination
-    :page="pagination"
-    @get-page="getProducts"
-    ></pagination>
+    <div class="d-flex justify-content-center">
+      <pagination
+      :page="pagination"
+      @get-page="getProducts"
+      ></pagination>
+    </div>
   </div>
   <!-- product modal -->
   <product-modal
@@ -60,16 +62,16 @@
   @update-product="updateProduct"
   ></product-modal>
   <!-- del product modal -->
-  <del-product-modal
-  id="delProductModal"
-  ref="delProductModal"
-  :temp-product="tempProduct"
-  @delete-product="deleteProduct"></del-product-modal>
+  <del-modal
+  id="delModal"
+  ref="delModal"
+  :item="tempProduct"
+  @delete="deleteProduct"></del-modal>
 </template>
 
 <script>
 import productModal from '@/components/ProductModal.vue';
-import delProductModal from '@/components/DelProductModal.vue';
+import delModal from '@/components/DelModal.vue';
 import pagination from '@/components/Pagination.vue';
 
 export default {
@@ -87,7 +89,7 @@ export default {
   },
   components: {
     productModal,
-    delProductModal,
+    delModal,
     pagination,
   },
   methods: {
@@ -125,7 +127,7 @@ export default {
           break;
         case 'delete':
           this.tempProduct = { ...item };
-          this.$refs.delProductModal.showModal();
+          this.$refs.delModal.showModal();
           break;
         default:
       }
@@ -174,7 +176,7 @@ export default {
           // eslint-disable-next-line no-alert
           alert(res.data.message);
           this.getProducts();
-          this.$refs.delProductModal.closeModal();
+          this.$refs.delModal.closeModal();
         } else {
           // eslint-disable-next-line no-alert
           alert(res.data.message);

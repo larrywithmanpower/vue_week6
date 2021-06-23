@@ -16,7 +16,8 @@
   <div class="row">
     <div class="col-md-4 mb-3" v-for="item in products" :key="item.id">
       <div class="card">
-        <img :src="item.imageUrl" class="card-img-top" alt="商品相片" />
+        <img :src="item.imageUrl" class="card-img-top img-fluid"
+        alt="商品相片" />
         <div class="card-body">
           <h5 class="card-title">{{ item.title }}</h5>
           <p class="card-text">
