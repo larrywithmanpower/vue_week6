@@ -1,4 +1,5 @@
 <template>
+  <Loading :active="isLoading"></Loading>
   <div class="table-responsive">
     <table class="table">
       <thead>
@@ -94,6 +95,7 @@ export default {
       tempOrder: {},
       isEdit: false,
       pagination: {},
+      isLoading: false,
     };
   },
   components: {
@@ -106,12 +108,14 @@ export default {
   },
   methods: {
     getOrders(page = 1) {
+      this.isLoading = true;
       const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/orders?page=${page}`;
       this.$http.get(url).then((res) => {
         if (res.data.success) {
           this.orders = res.data.orders;
           this.pagination = res.data.pagination;
           // console.log(this.orders);
+          this.isLoading = false;
         } else {
           // eslint-disable-next-line no-alert
           alert(res.data.message);

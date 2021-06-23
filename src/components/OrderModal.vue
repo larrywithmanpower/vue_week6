@@ -4,7 +4,7 @@
   id="orderModal"
   ref="orderModal"
   >
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header bg-dark text-white">
           <h5 class="modal-title bg-datk text-white">訂單細節</h5>
@@ -77,7 +77,9 @@
                     <th>
                       {{ item.product.title }}
                     </th>
-                    <td>{{ item.qty }} / {{ item.product.unit }}</td>
+                    <td>
+                      {{ item.qty }} / {{ item.product.unit }}
+                    </td>
                   </tr>
                 </tbody>
               </table>
