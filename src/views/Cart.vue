@@ -37,6 +37,7 @@
         </tfoot>
       </table>
       <button class="btn btn-outline-danger w-100"
+      v-show="carts.length !== 0"
       @click="delAllCarts()"
       >清空購物車</button>
     </div>
@@ -180,6 +181,7 @@ export default {
         } else {
           // eslint-disable-next-line no-alert
           alert('清空失敗');
+          this.isLoading = false;
         }
       });
     },
@@ -197,6 +199,9 @@ export default {
             alert(res.data.message);
             //! VeeValidate內建函式
             this.$refs.form.resetForm();
+            this.form.message = '';
+            this.carts = [];
+            this.finalTotal = '';
             this.isLoading = false;
           } else {
             // eslint-disable-next-line no-alert
@@ -209,7 +214,7 @@ export default {
     },
     isPhone(value) {
       const phoneNumber = /^(09)[0-9]{8}$/;
-      return phoneNumber.test(value) ? true : '需要正確的電話號碼';
+      return phoneNumber.test(value) ? true : '需要正確的手機號碼';
     },
   },
   created() {

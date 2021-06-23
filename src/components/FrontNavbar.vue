@@ -12,7 +12,7 @@
   </div>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">第六周作業</a>
+      <a class="navbar-brand" href="#">第七周作業</a>
       <button
         class="navbar-toggler"
         type="button"
