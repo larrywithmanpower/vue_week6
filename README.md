@@ -7,7 +7,8 @@
 
 ## 練習
 1. 加入pagination
-2. 製作order page
+2. 製作order頁面
+3. 製作coupo頁面
 
 ## Project setup
 ```
