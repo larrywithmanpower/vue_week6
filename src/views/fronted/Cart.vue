@@ -24,7 +24,17 @@
               </button>
             </td>
             <td>{{ item.product.title }}</td>
-            <td>{{ item.qty }}</td>
+            <td>
+              <div class="input-group input-group-sm">
+                  <span class="input-group-text">$</span>
+                  <input type="number"
+                      class="form-control"
+                      min="1"
+                      v-model.number="item.qty"
+                      @change="updateCart(item)">
+                  <span class="input-group-text">{{ item.product.unit }}</span>
+              </div>
+            </td>
             <td>{{ item.product.price }}</td>
           </tr>
         </tbody>
@@ -152,6 +162,20 @@ export default {
         this.carts = res.data.data.carts;
         this.finalTotal = res.data.data.final_total;
         this.isLoading = false;
+      });
+    },
+    updateCart(item) {
+      const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/cart/${item.id}`;
+      const data = {
+        product_id: item.id,
+        qty: item.qty,
+      };
+      this.$http.put(url, { data }).then((res) => {
+        if (res.data.success) {
+          console.log(res.data.data.qty);
+        }
+      }).catch((err) => {
+        console.log(err);
       });
     },
     delCartItem(id) {

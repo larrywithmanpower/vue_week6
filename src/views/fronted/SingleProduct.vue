@@ -12,9 +12,15 @@
         <p class=""><del>原價 NT$ {{ tempProduct.origin_price }} 元</del></p>
         <p class="text-danger h3"><strong>特價 NT$ {{ tempProduct.price }} 元</strong></p>
         <hr>
-        <button type="button" class="btn btn-outline-danger"
-        @click="addCart(tempProduct.id)"
-        >加入購物車</button>
+        <div class="input-group mb-3">
+            <input type="number" class="form-control" min="1" v-model.number="qty"
+            >
+            <button class="btn btn-danger" type="button" id="button-addon2"
+            @click="addCart(tempProduct.id)"
+            >
+                加入購物車
+            </button>
+        </div>
       </div>
     </div>
   </div>
@@ -53,13 +59,14 @@ export default {
         }
       });
     },
-    addCart(id, qty = 1) {
+    addCart(id) {
       this.isLoading = true;
       const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/cart`;
       const data = {
         product_id: id,
-        qty,
+        qty: this.qty,
       };
+      console.log(data);
       this.$http.post(url, { data }).then((res) => {
         if (res.data.success) {
           // eslint-disable-next-line no-alert
