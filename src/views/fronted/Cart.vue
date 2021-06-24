@@ -26,7 +26,6 @@
             <td>{{ item.product.title }}</td>
             <td>
               <div class="input-group input-group-sm">
-                  <span class="input-group-text">$</span>
                   <input type="number"
                       class="form-control"
                       min="1"
@@ -170,8 +169,10 @@ export default {
         product_id: item.id,
         qty: item.qty,
       };
+      this.isLoading = true;
       this.$http.put(url, { data }).then((res) => {
         if (res.data.success) {
+          this.isLoading = false;
           console.log(res.data.data.qty);
         }
       }).catch((err) => {
