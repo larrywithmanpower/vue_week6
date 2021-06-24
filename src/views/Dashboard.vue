@@ -16,6 +16,9 @@
             <router-link class="nav-link" to="/admin/orders">訂單列表</router-link>
           </li>
           <li class="nav-item">
+            <router-link class="nav-link" to="/admin/coupon">優惠劵列表</router-link>
+          </li>
+          <li class="nav-item">
             <router-link class="nav-link" to="/">回到前台</router-link>
           </li>
           <li class="nav-item">

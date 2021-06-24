@@ -135,7 +135,6 @@ export default {
     updateProduct(tempProduct) {
       // ! 新增
       if (this.isNew === true) {
-        console.log('新增', tempProduct);
         const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/product`;
         this.$http.post(url, { data: tempProduct }).then((res) => {
           if (res.data.success) {

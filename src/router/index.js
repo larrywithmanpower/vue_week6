@@ -10,16 +10,16 @@ const routes = [
       {
         // ! 設定為空，就可以取代layout變為首頁
         path: '',
-        component: () => import('../views/Home.vue'),
+        component: () => import('../views/fronted/Home.vue'),
       },
       {
         path: 'cart',
         name: 'Cart',
-        component: () => import('../views/Cart.vue'),
+        component: () => import('../views/fronted/Cart.vue'),
       },
       {
         path: 'products',
-        component: () => import('../views/Products.vue'),
+        component: () => import('../views/fronted/Products.vue'),
       },
       {
         path: '/login',
@@ -29,7 +29,7 @@ const routes = [
   },
   {
     path: '/product/:id',
-    component: () => import('../views/SingleProduct.vue'),
+    component: () => import('../views/fronted/SingleProduct.vue'),
   },
   //  後台
   {
@@ -44,6 +44,10 @@ const routes = [
         path: 'orders',
         component: () => import('../views/admin/Orders.vue'),
       },
+      {
+        path: 'coupon',
+        component: () => import('../views/admin/Coupon.vue'),
+      },
     ],
   },
 ];
@@ -54,7 +58,7 @@ const router = createRouter({
   linkActiveClass: 'active',
   scrollBehavior() {
     // 始终滚动到顶部
-    return { bottom: 0 };
+    return { top: 0 };
   },
 });
 
