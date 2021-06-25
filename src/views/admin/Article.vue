@@ -13,9 +13,9 @@
         <thead>
           <tr>
             <th width="20%">標題</th>
-            <th width="15%">簡介</th>
+            <th width="25%">簡介</th>
             <th width="10%">作者</th>
-            <th width="20%">日期</th>
+            <th width="15%">日期</th>
             <th width="10%">是否公開</th>
             <th></th>
           </tr>
@@ -27,10 +27,10 @@
             <td>{{ article.author }}</td>
             <td>{{ new Date(article.create_at * 1000).toLocaleDateString() }}</td>
             <td>
-              <span :class="{ 'text-success': article.is_enabled }"
-              v-if="article.is_enabled">發布</span>
-              <span :class="{ 'text-danger': !article.is_enabled }"
-              v-if="!article.is_enabled">未發布</span>
+              <span :class="{ 'text-success': article.isPublic }"
+              v-if="article.isPublic">發布</span>
+              <span :class="{ 'text-danger': !article.isPublic }"
+              v-if="!article.isPublic">未發布</span>
             </td>
             <td>
               <div class="btn-group">
