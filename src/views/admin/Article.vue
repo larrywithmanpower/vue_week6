@@ -1,46 +1,46 @@
 <template>
-  <div>
+    <div>
     <Loading :active="isLoading"></Loading>
     <button
     type="button"
     class="btn btn-primary my-3"
     @click="openModal('new')"
     >
-    新增優惠劵
+    新增文章
     </button>
     <div class="table-responsive">
       <table class="table align-middle text-center">
         <thead>
           <tr>
-            <th width="20%">方案</th>
-            <th width="15%">折扣碼</th>
-            <th width="10%">折扣</th>
-            <th width="20%">期限</th>
-            <th width="10%">是否啟用</th>
+            <th width="20%">標題</th>
+            <th width="15%">簡介</th>
+            <th width="10%">作者</th>
+            <th width="20%">日期</th>
+            <th width="10%">是否公開</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="coupon in coupons" :key="coupon.id">
-            <td>{{ coupon.title }}</td>
-            <td>{{ coupon.code }}</td>
-            <td>{{ coupon.percent }} %</td>
-            <td>{{ new Date(coupon.due_date * 1000).toLocaleDateString() }}</td>
+          <tr v-for="article in articles" :key="article.id">
+            <td>{{ article.title }}</td>
+            <td>{{ article.description }}</td>
+            <td>{{ article.author }}</td>
+            <td>{{ new Date(article.create_at * 1000).toLocaleDateString() }}</td>
             <td>
-              <span :class="{ 'text-success': coupon.is_enabled }"
-              v-if="coupon.is_enabled">啟用</span>
-              <span :class="{ 'text-danger': !coupon.is_enabled }"
-              v-if="!coupon.is_enabled">未啟用</span>
+              <span :class="{ 'text-success': article.is_enabled }"
+              v-if="article.is_enabled">發布</span>
+              <span :class="{ 'text-danger': !article.is_enabled }"
+              v-if="!article.is_enabled">未發布</span>
             </td>
             <td>
               <div class="btn-group">
                 <button type="button"
                 class="btn btn-sm btn-outline-primary"
-                @click="openModal('edit', coupon)"
+                @click="openModal('edit', article)"
                 >編輯</button>
                 <button type="button"
                 class="btn btn-sm btn-outline-danger"
-                @click="openModal('delete', coupon)"
+                @click="openModal('delete', article)"
                 >刪除</button>
               </div>
             </td>
@@ -50,51 +50,53 @@
     </div>
   </div>
 
-  <couponModal
-  id="couponModal"
-  ref="couponModal"
+  <articleModal
+  id="articleModal"
+  ref="articleModal"
   :is-new="isNew"
-  :coupon="tempCoupon"
-  @update-coupon="updateCoupon"
-  ></couponModal>
+  :article="tempArticle"
+  @update-article="updateArticle"
+  ></articleModal>
 
-  <!-- del product modal -->
   <del-modal
   id="delModal"
   ref="delModal"
-  :item="tempCoupon"
-  @delete="deleteCoupon"></del-modal>
+  :item="tempArticle"
+  @delete="deleteArticle"></del-modal>
 </template>
 
 <script>
-import couponModal from '@/components/CouponModal.vue';
+import articleModal from '@/components/ArticleModal.vue';
 import delModal from '@/components/DelModal.vue';
 
 export default {
   data() {
     return {
       isLoading: false,
-      coupons: [],
+      articles: [],
       isNew: false,
-      tempCoupon: {},
+      tempArticle: {
+        tag: [],
+        imagesUrl: [],
+      },
     };
   },
   inject: ['emitter'],
   components: {
-    couponModal,
+    articleModal,
     delModal,
   },
   created() {
-    this.getCoupons();
+    this.getArticles();
   },
   methods: {
-    getCoupons(page = 1) {
+    getArticles(page = 1) {
       this.isLoading = true;
-      const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/coupons?page=${page}`;
+      const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/articles?page=${page}`;
       this.$http.get(url).then((res) => {
         if (res.data.success) {
           console.log(res);
-          this.coupons = res.data.coupons;
+          this.articles = res.data.articles;
           this.isLoading = false;
         } else {
           // eslint-disable-next-line no-alert
@@ -104,38 +106,40 @@ export default {
         console.log(err);
       });
     },
-    openModal(isNew, coupon) {
+    openModal(isNew, article) {
       switch (isNew) {
         case 'new':
           this.isNew = true;
-          this.tempCoupon = {
-            due_date: Math.floor(Date.now() / 1000),
-            is_enabled: 1,
+          this.tempArticle = {
+            create_at: Math.floor(Date.now() / 1000),
+            isPublic: false,
+            tag: [],
+            imagesUrl: [],
           };
-          this.$refs.couponModal.showModal();
+          this.$refs.articleModal.showModal();
           break;
         case 'edit':
           this.isNew = false;
-          this.tempCoupon = {
-            ...coupon,
+          this.tempArticle = {
+            ...article,
           };
-          this.$refs.couponModal.showModal();
+          this.$refs.articleModal.showModal();
           break;
         case 'delete':
-          this.tempCoupon = { ...coupon };
+          this.tempArticle = { ...article };
           this.$refs.delModal.showModal();
           break;
         default:
           break;
       }
     },
-    updateCoupon(tempCoupon) {
+    updateArticle(tempArticle) {
       // ! 新增
       if (this.isNew === true) {
-        const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/coupon`;
-        this.$http.post(url, { data: tempCoupon }).then((res) => {
+        const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/article`;
+        this.$http.post(url, { data: tempArticle }).then((res) => {
           if (res.data.success) {
-            this.getCoupons();
+            this.getArticles();
             this.emitter.emit('push-message', {
               style: 'success',
               title: res.data.message,
@@ -153,19 +157,19 @@ export default {
         });
       } else {
         // ! 編輯
-        const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/coupon/${tempCoupon.id}`;
-        this.$http.put(url, { data: tempCoupon }).then((res) => {
+        const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/article/${tempArticle.id}`;
+        this.$http.put(url, { data: tempArticle }).then((res) => {
           if (res.data.success) {
             this.emitter.emit('push-message', {
               style: 'success',
               title: `${res.data.message}`,
             });
-            this.getCoupons();
-            this.$refs.couponModal.closeModal();
+            this.getArticles();
+            this.$refs.articleModal.closeModal();
           } else {
             this.emitter.emit('push-message', {
               style: 'danger',
-              title: `${tempCoupon.title}更新失敗`,
+              title: `${tempArticle.title}更新失敗`,
               content: res.data.message.join('、'),
             });
           }
@@ -174,15 +178,15 @@ export default {
         });
       }
     },
-    deleteCoupon(tempCoupon) {
-      const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/coupon/${tempCoupon.id}`;
+    deleteArticle(tempArticle) {
+      const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/article/${tempArticle.id}`;
       this.$http.delete(url).then((res) => {
         if (res.data.success) {
           this.emitter.emit('push-message', {
             style: 'success',
             title: res.data.message,
           });
-          this.getProducts();
+          this.getArticles();
           this.$refs.delModal.closeModal();
         } else {
           this.emitter.emit('push-message', {

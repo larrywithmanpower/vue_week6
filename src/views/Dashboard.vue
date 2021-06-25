@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <div class="container-fluid">
       <a class="navbar-brand logoFont display-2" href="#">HanShe</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -19,6 +19,9 @@
             <router-link class="nav-link" to="/admin/coupon">優惠劵列表</router-link>
           </li>
           <li class="nav-item">
+            <router-link class="nav-link" to="/admin/article">文章列表</router-link>
+          </li>
+          <li class="nav-item">
             <router-link class="nav-link" to="/">回到前台</router-link>
           </li>
           <li class="nav-item">
@@ -31,6 +34,7 @@
     </div>
   </nav>
   <div class="container">
+    <ToastMessage></ToastMessage>
     <router-view v-if="checkSuccess"></router-view>
   </div>
 </template>
@@ -44,10 +48,19 @@
 </style>
 
 <script>
+import emitter from '@/methods/emitter';
+import ToastMessage from '@/components/ToastMessage.vue';
+
 export default {
+  components: { ToastMessage },
   data() {
     return {
       checkSuccess: false,
+    };
+  },
+  provide() {
+    return {
+      emitter,
     };
   },
   methods: {

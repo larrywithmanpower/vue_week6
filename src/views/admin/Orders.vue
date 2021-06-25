@@ -98,6 +98,7 @@ export default {
       isLoading: false,
     };
   },
+  inject: ['emitter'],
   components: {
     orderModal,
     delModal,
@@ -150,10 +151,19 @@ export default {
       };
       const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/order/${item.id}`;
       this.$http.put(url, { data: paid }).then((res) => {
-        // eslint-disable-next-line no-alert
-        alert(res.data.message);
-        console.log(res.data);
-        this.getOrders();
+        if (res.data.success) {
+          this.getOrders();
+          this.emitter.emit('push-message', {
+            style: 'success',
+            title: res.data.message,
+          });
+        } else {
+          this.emitter.emit('push-message', {
+            style: 'danger',
+            title: '更新失敗',
+            content: res.data.message.join('、'),
+          });
+        }
       }).catch((err) => {
         console.log(err);
       });
@@ -162,13 +172,17 @@ export default {
       const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/order/${tempOrder.id}`;
       this.$http.delete(url).then((res) => {
         if (res.data.success) {
-          // eslint-disable-next-line no-alert
-          alert(res.data.message);
+          this.emitter.emit('push-message', {
+            style: 'success',
+            title: res.data.message,
+          });
           this.getOrders();
           this.$refs.delModal.closeModal();
         } else {
-          // eslint-disable-next-line no-alert
-          alert(res.data.message);
+          this.emitter.emit('push-message', {
+            style: 'danger',
+            title: res.data.message,
+          });
         }
       });
     },

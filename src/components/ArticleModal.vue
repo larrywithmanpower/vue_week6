@@ -1,11 +1,11 @@
 <template>
-  <div class="modal fade" id="productModal"
-  ref="productModal"
-  tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal fade" id="articleModal"
+  ref="articleModal"
+  tabindex="-1" aria-labelledby="articleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header bg-dark text-white">
-          <h5 class="modal-title" id="productModalLabel">{{ isNew ? '新增商品' : '編輯商品' }}</h5>
+          <h5 class="modal-title" id="articleModalLabel">{{ isNew ? '新增文章' : '編輯文章' }}</h5>
           <button type="button"
           class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -17,11 +17,11 @@
                   <div class="form-group">
                       <label for="imageUrl" class="fw-bold">主要圖片</label>
                       <input
-                      v-model="editProduct.imageUrl" type="text"
+                      v-model="tempArticle.imageUrl" type="text"
                       class="form-control"
                       placeholder="請輸入圖片連結">
                   </div>
-                  <img class="img-fluid" :src="editProduct.imageUrl">
+                  <img class="img-fluid" :src="tempArticle.imageUrl">
                 </div>
                 <div class="form-group mb-3">
                     <label for="photoFile" class="fw-bold">上傳圖片檔案</label>
@@ -33,29 +33,29 @@
                 <hr>
                 <!-- ? 多圖 -->
                 <div class="mb-1 fw-bold">其他圖片</div>
-                <div v-if="Array.isArray(editProduct.imagesUrl)">
-                    <div class="mb-1" v-for="(image, index) in editProduct.imagesUrl" :key="index">
+                <div v-if="Array.isArray(tempArticle.imagesUrl)">
+                    <div class="mb-1" v-for="(image, index) in tempArticle.imagesUrl" :key="index">
                         <label for="imageUrl">圖片網址</label>
                         <input
-                        v-model="editProduct.imagesUrl[index]"
+                        v-model="tempArticle.imagesUrl[index]"
                         type="text"
                         class="form-control"
                         placeholder="請輸入圖片連結">
-                        <img :src="editProduct.imagesUrl[index]" class="img-fluid">
+                        <img :src="tempArticle.imagesUrl[index]" class="img-fluid">
                     </div>
                     <div
-                    v-if="!editProduct.imagesUrl.length ||
-                    editProduct.imagesUrl[editProduct.imagesUrl.length - 1]">
+                    v-if="!tempArticle.imagesUrl.length ||
+                    tempArticle.imagesUrl[tempArticle.imagesUrl.length - 1]">
                         <button
                         class="btn btn-outline-primary btn-sm d-block w-100"
-                        @click="editProduct.imagesUrl.push('')">
+                        @click="tempArticle.imagesUrl.push('')">
                             新增圖片
                         </button>
                     </div>
                     <div v-else>
                         <button
                         class="btn btn-outline-danger btn-sm d-block w-100"
-                        @click="editProduct.imagesUrl.pop()">
+                        @click="tempArticle.imagesUrl.pop()">
                             刪除空白圖片網址
                         </button>
                     </div>
@@ -69,66 +69,62 @@
             <div class="col-sm-8">
               <div class="form-group">
                   <label for="title">標題</label>
-                  <input v-model="editProduct.title" id="title"
+                  <input v-model="tempArticle.title" id="title"
                   type="text"
                   class="form-control"
                   placeholder="請輸入標題">
               </div>
-                <div class="row">
-                  <div class="form-group col-md-6">
-                    <label for="category">分類</label>
-                    <input
-                      v-model="editProduct.category"
-                      id="category"
-                      type="text"
-                      class="form-control"
-                      placeholder="請輸入分類"
-                    />
-                  </div>
-                  <div class="form-group col-md-6">
-                    <label for="price">單位</label>
-                    <input
-                      v-model="editProduct.unit"
-                      id="unit"
-                      type="text"
-                      class="form-control"
-                      placeholder="請輸入單位"
-                    />
-                  </div>
+                <div class="form-group mb-3">
+                  <label for="category">作者</label>
+                  <input
+                    v-model="tempArticle.author"
+                    id="category"
+                    type="text"
+                    class="form-control"
+                    placeholder="請輸入您的大名"
+                  />
                 </div>
-                <div class="row">
-                  <div class="form-group col-md-6">
-                      <label for="origin_price">原價</label>
-                      <input v-model.number="editProduct.origin_price"
-                      id="origin_price"
-                      type="number"
-                      min="0"
-                      class="form-control"
-                      placeholder="請輸入原價">
-                  </div>
-                  <div class="form-group col-md-6">
-                      <label for="price">售價</label>
-                      <input v-model.number="editProduct.price" id="price" type="number" min="0"
-                          class="form-control" placeholder="請輸入售價">
-                  </div>
+                <!-- 標籤比較難處理，不過與圖片新增大同小異，且不是一定要提供的 -->
+                <div class="form-group">
+                    <div class="mb-1" v-for="(item, index) in tempArticle.tag" :key="index">
+                        <label for="tag">標籤{{ index + 1 }}</label>
+                        <input
+                        v-model="tempArticle.tag[index]"
+                        type="text"
+                        class="form-control"
+                        placeholder="請輸入標籤名稱">
+                    </div>
+                    <div class="btn-group w-100">
+                      <button
+                        class="btn btn-outline-primary btn-sm d-block w-100"
+                        @click="tempArticle.tag.push('')">
+                          加入標籤
+                      </button>
+                      <button
+                        class="btn btn-outline-danger btn-sm d-block w-100"
+                        @click="tempArticle.tag.pop()">
+                            刪除標籤
+                      </button>
+
+                    </div>
                 </div>
                 <hr>
                 <div class="form-group mb-3">
-                    <label for="description">產品描述</label>
-                    <textarea v-model="editProduct.description" id="description" type="text"
-                        class="form-control" placeholder="請輸入產品描述"></textarea>
+                    <label for="description">文章簡介</label>
+                    <textarea v-model="tempArticle.description" id="description" type="text"
+                        class="form-control" placeholder="請撰寫內文"></textarea>
                 </div>
                 <div class="form-group mb-3">
-                    <label for="content">說明內容</label>
-                    <textarea v-model="editProduct.content" id="content" type="text"
-                        class="form-control" placeholder="請輸入說明內容"></textarea>
+                    <label for="content">文章內容</label>
+                    <textarea v-model="tempArticle.content" id="content" type="text"
+                        class="form-control" placeholder="請輸入文章內容"></textarea>
                 </div>
                 <div class="form-group">
                     <div class="form-check">
-                        <input v-model="editProduct.is_enabled"
-                        id="is_enabled" class="form-check-input"
-                        type="checkbox" :true-value="1" :false-value="0">
-                        <label class="form-check-label" for="is_enabled">是否啟用</label>
+                        <input v-model="tempArticle.isPublic"
+                        id="isPublic" class="form-check-input"
+                        type="checkbox" :true-value="true" :false-value="false">
+                        <label class="form-check-label" for="isPublic">是否發布</label>
                     </div>
                 </div>
             </div>
@@ -138,7 +134,7 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
             <button type="button"
             class="btn btn-primary"
-            @click="$emit('update-product', editProduct)"
+            @click="$emit('update-article', tempArticle)"
             >確認</button>
           </div>
       </div>
@@ -150,27 +146,27 @@
 import { Modal } from 'bootstrap';
 
 export default {
-  props: ['tempProduct', 'isNew'],
+  props: ['article', 'isNew'],
   data() {
     return {
-      productModal: {},
-      editProduct: {},
+      articleModal: {},
+      tempArticle: {},
     };
   },
   mounted() {
-    this.productModal = new Modal(this.$refs.productModal);
+    this.articleModal = new Modal(this.$refs.articleModal);
   },
   watch: {
-    tempProduct() {
-      this.editProduct = this.tempProduct;
+    article() {
+      this.tempArticle = this.article;
     },
   },
   methods: {
     showModal() {
-      this.productModal.show();
+      this.articleModal.show();
     },
     closeModal() {
-      this.productModal.hide();
+      this.articleModal.hide();
     },
     uploadImage() {
       // ! DOM要放在子元件內才找的到
@@ -187,9 +183,9 @@ export default {
         if (res.data.success) {
           // ! 判斷tempProduct.imageUrl是否存在，不存在就加入倒imageUrl(單張)，存在新增到陣列imagesUrl中
           if (!this.tempProduct.imageUrl) {
-            this.editProduct.imageUrl = res.data.imageUrl;
+            this.tempArticle.imageUrl = res.data.imageUrl;
           } else {
-            this.editProduct.imagesUrl.push(res.data.imageUrl);
+            this.tempArticle.imagesUrl.push(res.data.imageUrl);
           }
           // 加入傳上圖片就清空value文字
           fileInput.value = '';
@@ -199,10 +195,10 @@ export default {
       });
     },
     removeImages() {
-      if (this.editProduct.imagesUrl.length) {
-        this.editProduct.imagesUrl.pop();
+      if (this.tempArticle.imagesUrl.length) {
+        this.tempArticle.imagesUrl.pop();
       } else {
-        this.editProduct.imageUrl = '';
+        this.tempArticle.imageUrl = '';
       }
     },
   },

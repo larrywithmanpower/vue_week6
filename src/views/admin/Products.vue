@@ -87,6 +87,7 @@ export default {
       isNew: false,
     };
   },
+  inject: ['emitter'],
   components: {
     productModal,
     delModal,
@@ -138,14 +139,18 @@ export default {
         const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/product`;
         this.$http.post(url, { data: tempProduct }).then((res) => {
           if (res.data.success) {
-            // eslint-disable-next-line no-alert
-            alert(res.data.message);
+            this.emitter.emit('push-message', {
+              style: 'success',
+              title: res.data.message,
+            });
             this.getProducts();
-            console.log(res);
             this.$refs.productModal.closeModal();
           } else {
-            // eslint-disable-next-line no-alert
-            alert(res.data.message);
+            this.emitter.emit('push-message', {
+              style: 'danger',
+              title: '更新失敗',
+              content: res.data.message.join('、'),
+            });
           }
         }).catch((err) => {
           console.log(err);
@@ -154,14 +159,20 @@ export default {
         // ! 編輯
         const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/product/${tempProduct.id}`;
         this.$http.put(url, { data: tempProduct }).then((res) => {
+          this.$refs.productModal.closeModal();
           if (res.data.success) {
-            // eslint-disable-next-line no-alert
-            alert(res.data.message);
+            console.log(res.data.message);
             this.getProducts();
-            this.$refs.productModal.closeModal();
+            this.emitter.emit('push-message', {
+              style: 'success',
+              title: res.data.message,
+            });
           } else {
-            // eslint-disable-next-line no-alert
-            alert(res.data.message);
+            this.emitter.emit('push-message', {
+              style: 'danger',
+              title: '更新失敗',
+              content: res.data.message.join('、'),
+            });
           }
         }).catch((err) => {
           console.log(err);
@@ -172,13 +183,17 @@ export default {
       const url = `${process.env.VUE_APP_URL}/api/${process.env.VUE_APP_PATH}/admin/product/${tempProduct.id}`;
       this.$http.delete(url).then((res) => {
         if (res.data.success) {
-          // eslint-disable-next-line no-alert
-          alert(res.data.message);
+          this.emitter.emit('push-message', {
+            style: 'success',
+            title: res.data.message,
+          });
           this.getProducts();
           this.$refs.delModal.closeModal();
         } else {
-          // eslint-disable-next-line no-alert
-          alert(res.data.message);
+          this.emitter.emit('push-message', {
+            style: 'danger',
+            title: res.data.message,
+          });
         }
       });
     },
