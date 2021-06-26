@@ -120,8 +120,10 @@ export default {
           break;
         case 'edit':
           this.isNew = false;
+          console.log(article);
           this.tempArticle = {
             ...article,
+            content: '新品文章',
           };
           this.$refs.articleModal.showModal();
           break;
@@ -144,7 +146,7 @@ export default {
               style: 'success',
               title: res.data.message,
             });
-            this.$refs.couponModal.closeModal();
+            this.$refs.articleModal.closeModal();
           } else {
             this.emitter.emit('push-message', {
               style: 'danger',

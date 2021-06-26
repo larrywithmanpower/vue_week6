@@ -110,14 +110,18 @@
                 </div>
                 <hr>
                 <div class="form-group mb-3">
-                    <label for="description">文章簡介</label>
+                    <label for="description">文章內容</label>
                     <textarea v-model="tempArticle.description" id="description" type="text"
                         class="form-control" placeholder="請撰寫內文"></textarea>
                 </div>
                 <div class="form-group mb-3">
-                    <label for="content">文章內容</label>
-                    <textarea v-model="tempArticle.content" id="content" type="text"
-                        class="form-control" placeholder="請輸入文章內容"></textarea>
+                    <label for="content">文章類型</label>
+                    <textarea
+                    v-model="tempArticle.content"
+                    id="content" type="text"
+                    class="form-control"
+                    placeholder="請輸入文章類型">
+                    </textarea>
                 </div>
                 <div class="form-group">
                     <div class="form-check">

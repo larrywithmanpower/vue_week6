@@ -14,25 +14,51 @@
 
   <h3 class="text-center">產品列表</h3>
   <div class="row">
-    <div class="col-md-4 mb-3" v-for="item in products" :key="item.id">
-      <div class="card">
-        <img :src="item.imageUrl" class="card-img-top img-fluid"
-        alt="商品相片" />
-        <div class="card-body">
-          <h5 class="card-title">{{ item.title }}</h5>
-          <p class="card-text">
-            {{ item.content }}
-          </p>
-          <div class="d-flex">
-            <a href="#" class="btn btn-primary" @click.prevent="goToPage(item)"
-              >查看更多</a
-            >
-            <a
-              href="#"
-              class="btn btn-outline-danger ms-auto"
-              @click.prevent="addCart(item.id)"
-              >加入購物車</a
-            >
+    <div class="col-md-3 mb-3">
+      <div class="list-group">
+        <a href="#"
+        class="list-group-item list-group-item-action list-group-item-primary" aria-current="true"
+        @click.prevent="filterCategory = ''" :class="{ active: filterCategory === '' }"
+        >
+          所有商品
+        </a>
+        <a href="#" class="list-group-item list-group-item-action list-group-item-primary"
+        @click.prevent="filterCategory = 'V'" :class="{ active: filterCategory === 'V' }"
+        >V</a>
+        <a href="#"
+        class="list-group-item list-group-item-action list-group-item-primary"
+        @click.prevent="filterCategory = '靴子'" :class="{ active: filterCategory === '靴子' }"
+        >靴子</a>
+        <a href="#"
+        class="list-group-item list-group-item-action list-group-item-primary"
+        @click.prevent="filterCategory = '套裝'" :class="{ active: filterCategory === '套裝' }"
+        >套裝</a>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="row">
+        <!-- ! 注意：這邊是要去找已經篩選過的物件，也就是filterCategories -->
+        <div class="col-md-4 mb-3" v-for="item in filterCategories" :key="item.id">
+          <div class="card">
+            <img :src="item.imageUrl" class="card-img-top img-fluid"
+            alt="商品相片" />
+            <div class="card-body">
+              <h5 class="card-title">{{ item.title }}</h5>
+              <p class="card-text">
+                {{ item.content }}
+              </p>
+              <div class="d-flex">
+                <a href="#" class="btn btn-primary" @click.prevent="goToPage(item)"
+                  >查看更多</a
+                >
+                <a
+                  href="#"
+                  class="btn btn-outline-danger ms-auto"
+                  @click.prevent="addCart(item.id)"
+                  >加入購物車</a
+                >
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -64,7 +90,17 @@ export default {
       isLoading: false,
       scY: 0,
       scTimer: 0,
+      filterCategory: '',
+      categories: ['休閒', '套裝', '靴子', 'V'],
     };
+  },
+  computed: {
+    filterCategories() {
+      if (this.filterCategory) {
+        return this.products.filter((item) => item.category.match(this.filterCategory));
+      }
+      return this.products;
+    },
   },
   methods: {
     getProducts() {
